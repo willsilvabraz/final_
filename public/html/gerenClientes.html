@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/styles/dashboard.css">
+    <link rel="stylesheet" href="../assets/styles/gerenClientes.css">
+   
+    <script defer src="../assets/scripts/jquery.min.js"></script>
+      <script defer src="../assets/scripts/bootstrap.min.js"></script>
+      <script defer src="../assets/scripts/main.js"></script>
+      <script defer src="../assets/scripts/popper.js"></script>
+    
+</head>
+<body>
+
+<div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar">
+            <div class="custom-menu">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+          <i class="fa fa-bars"></i>
+          <span class="sr-only">Toggle Menu</span>
+        </button>
+    </div>
+          <h1><a href="dashboard.html" class="logo">POSDash</a></h1>
+    <ul class="list-unstyled components mb-5">
+      <li>
+        <a href="dashboard.html"><span class="fa fa-user mr-3"></span> Dashboard</a>
+    </li>
+    <li>
+      <a href="gerenClientes.html"><span class="fa fa-sticky-note mr-3"></span>Cadastrar Cliente</a>
+    </li>
+    <li>
+      <a href="listVenda.html"><span class="fa fa-sticky-note mr-3"></span>Cadastrar usuário</a>
+    </li>
+    <li>
+      <a href="gerenProduto.html"><span class="fa fa-sticky-note mr-3"></span>Cadastar Produtos</a>
+    </li>
+    <li>
+      <a href="venda.html"><span class="fa fa-sticky-note mr-3"></span>Realizar vendas</a>
+    </li>
+    <li>
+      <a href="listVenda.html"><span class="fa fa-sticky-note mr-3"></span>Listar vendas</a>
+    </li>
+    <li>
+        <a href="login.html"><span class="fa fa-sticky-note mr-3"></span>Sair</a>
+      </li>
+    </ul>
+</nav>
+
+<div class="container">
+    <div class="col-lg-6" id="cad" style="display: flex;">
+        <form >
+            <h1>Cadastro de Clientes</h1>
+            <div class="form-group">
+                <label for="nome">Nome:</label>
+                <input type="text" class="form-control" id="nome" name="nome" required placeholder="Digite seu Nome">
+            </div>
+            <div class="form-group">
+                <label for="sobrenome">Sobrenome:</label>
+                <input type="text" class="form-control" id="sobrenome" name="sobrenome" required placeholder="Digite seu Sobrenome">
+            </div>
+            <div class="form-group">
+                <label for="cepInput">CEP:</label>
+                <input type="text" class="form-control" id="cepInput" name="cep" onchange="buscarEndereco()" required placeholder="EX: 44055-23">
+            </div>
+            <div class="form-group">
+                <label for="endereco">Endereço:</label>
+                <input type="text" class="form-control" id="endereco" name="endereco" required placeholder="Digite seu Endereço">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required placeholder="Digite seu Email">
+            </div>
+            <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="tel" class="form-control" id="telefone" name="telefone" required placeholder="(00) 00000-0000">
+            </div>
+            <div class="form-group">
+                <label for="cpf">CPF:</label>
+                <input type="text" class="form-control" id="cpf" name="cpf" placeholder="000.000.000-00">
+            </div>
+            <div class="form-group">
+                <label for="cnpj">CNPJ:</label>
+                <input type="text" class="form-control" id="cnpj" name="cnpj" placeholder="00.000.000/0001-00">
+            </div>
+
+            <br>
+            
+            <button type="submit" class="btn btn-primary" onclick="cadastrarCliente()">Cadastrar Cliente</button>
+        </form>
+    </div>
+
+
+
+    <div class="container">
+
+        <table class="table table-dark">
+          <thead>
+          <tr>
+            <th scope="col">nome</th>
+            <th scope="col">sobrenome</th>
+            <th scope="col">telefone</th>
+            <th scope="col">endereco</th>
+            <th scope="col">email</th>
+            <th scope="col">cpf</th>
+            <th scope="col">cnpj</th>
+          </tr>
+        </thead>
+        <tbody id="data-list">
+        </tbody>
+      </table>
+      </div>
+    
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="../assets/scripts/listClients.js"></script>
+<script src="../assets/scripts/cadastrarCliente.js"></script>
+<script>
+function buscarEndereco() {
+    var cep = document.getElementById('cepInput').value;
+    var url = `https://viacep.com.br/ws/${cep}/json/`;
+
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        if(data.erro) {
+            document.getElementById('endereco').innerText = "CEP não encontrado.";
+        } else {
+            var endereco = `${data.logradouro}, ${data.bairro}, ${data.localidade} - ${data.uf}`;
+            document.getElementById('endereco').value = endereco;
+        }
+    })
+    .catch(error => console.error('Erro:', error));
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    var deleteButtons = document.querySelectorAll('.delete-button');
+    deleteButtons.forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); 
+            var clienteId = this.dataset.clienteId; 
+        });
+    });
+});
+</script>
+
+
+</body>
+</html>
+

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selecionar Cliente e Produto</title>
+</head>
+<body>
+    <h2>Selecione um Cliente e um Produto</h2>
+
+    <div>
+        <label for="clientes">Clientes:</label>
+        <select id="clientes">
+        </select>
+    </div>
+
+    <div>
+        <label for="produtos">Produtos:</label>
+        <select id="produtos">
+          
+        </select>
+    </div>
+
+    <script>
+        fetch('http://localhost:3000/clientes')
+            .then(response => response.json())
+            .then(clientes => {
+                const clientesSelect = document.getElementById('clientes');
+                clientes.forEach(cliente => {
+                    const option = document.createElement('option');
+                    option.text = `${cliente.nome} ${cliente.sobrenome}`;
+                    option.value = cliente.id; 
+                    clientesSelect.add(option);
+                });
+            })
+            .catch(error => console.error('Erro ao recuperar clientes:', error));
+
+        fetch('http://localhost:3000/produtos')
+            .then(response => response.json())
+            .then(produtos => {
+                const produtosSelect = document.getElementById('produtos');
+                produtos.forEach(produto => {
+                    const option = document.createElement('option');
+                    option.text = produto.nome;
+                    option.value = produto.id; 
+                    produtosSelect.add(option);
+                });
+            })
+            .catch(error => console.error('Erro ao recuperar produtos:', error));
+    </script>
+</body>
+</html>
